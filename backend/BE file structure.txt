@@ -1,0 +1,32 @@
+backend/
+├── node_modules/
+├── src/
+│   ├── config/
+│   │   └── db.config.js            # Database connection configuration
+│   │   └── app.config.js           # General app configurations
+│   ├── controllers/
+│   │   └── studentController.js    # Handles student-related logic
+│   │   └── attendanceController.js # Handles attendance-related logic
+│   ├── middleware/
+│   │   └── authMiddleware.js       # Authentication middleware (if needed)
+│   │   └── errorHandler.js         # Error handling middleware
+│   ├── models/
+│   │   └── studentModel.js         # Defines the structure of a student entity
+│   │   └── attendanceModel.js      # Defines the structure of an attendance entity
+│   ├── repositories/
+│   │   └── studentRepository.js    # Handles CRUD operations for students
+│   │   └── attendanceRepository.js # Handles CRUD operations for attendance records
+│   ├── routes/
+│   │   └── studentRoutes.js        # Routes for managing students
+│   │   └── attendanceRoutes.js     # Routes for attendance management
+│   ├── services/
+│   │   └── rfidService.js          # Logic to handle RFID scans
+│   ├── utils/
+│   │   └── logger.js               # Logger for debugging
+│   └── app.js                      # Main Express application setup
+│   └── server.js                   # Server setup and starting point
+├── .env                            # Environment variables
+├── .gitignore                      # Ignored files
+├── package.json                    # Project metadata
+├── package-lock.json               # Lock file for npm dependencies
+└── README.md                       # Project documentation
