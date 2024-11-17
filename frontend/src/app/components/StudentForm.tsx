@@ -57,7 +57,9 @@ const StudentForm = () => {
         onChange={(e) => setDob(e.target.value)}
         required
       />
-      <select onChange={(e) => setGender(e.target.value)} required>
+
+      <label htmlFor="gender">Select Gender</label>
+      <select id="gender" onChange={(e) => setGender(e.target.value)} required>
         <option value="">Select Gender</option>
         <option value="M">Male</option>
         <option value="F">Female</option>

@@ -1,5 +1,4 @@
-// src/app/view-rfid-codes/page.tsx
-"use client"; // This marks the component as a client component
+"use client";
 
 import React, { useEffect, useState } from "react";
 
@@ -15,10 +14,12 @@ const ViewRFIDCodes: React.FC = () => {
   useEffect(() => {
     const fetchRFIDData = async () => {
       try {
-        const response = await fetch("/api/rfid/show-rfid-codes");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/rfid/show-rfid-codes`
+        );
         if (response.ok) {
-          const data = await response.json();
-          setRFIDData(data);
+          const jsonResponse = await response.json();
+          setRFIDData(jsonResponse.data);
         } else {
           console.error("Failed to fetch RFID codes");
         }
@@ -30,11 +31,45 @@ const ViewRFIDCodes: React.FC = () => {
     fetchRFIDData();
   }, []);
 
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+
+  const toggleText = (id: number) => {
+    setExpandedRows((prev) => {
+      const updated = new Set(prev);
+      if (updated.has(id)) {
+        updated.delete(id);
+      } else {
+        updated.add(id);
+      }
+      return updated;
+    });
+  };
+
+  const renderTextWithEllipsis = (text: string, id: number) => {
+    const limit = 15; // Character limit for ellipsis
+    const isExpanded = expandedRows.has(id);
+    const displayText = isExpanded
+      ? text
+      : text.length > limit
+      ? text.slice(0, limit) + "..."
+      : text;
+
+    return (
+      <span
+        onClick={() => toggleText(id)}
+        className="cursor-pointer hover:underline"
+        title={text}
+      >
+        {displayText}
+      </span>
+    );
+  };
+
   return (
-    <div className="flex flex-col items-center min-h-screen bg-background text-foreground p-6">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 text-gray-800 p-6">
       <h1 className="text-3xl font-bold mb-6">RFID Codes</h1>
       <div className="w-full max-w-3xl">
-        <table className="min-w-full bg-white rounded-lg shadow-md">
+        <table className="min-w-full bg-white rounded-lg shadow-md text-center">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b border-gray-200">ID</th>
@@ -43,16 +78,16 @@ const ViewRFIDCodes: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {rfidData.map((record: any) => (
-              <tr key={record.id}>
-                <td className="py-2 px-4 border-b border-gray-200 text-center">
+            {rfidData.map((record: RFIDRecord) => (
+              <tr key={record.id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b border-gray-200">
                   {record.id}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200">
-                  {record.name}
+                  {renderTextWithEllipsis(record.name, record.id)}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-200">
-                  {record.rfid}
+                  {renderTextWithEllipsis(record.rfid, record.id)}
                 </td>
               </tr>
             ))}
